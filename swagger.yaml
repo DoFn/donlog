@@ -117,6 +117,15 @@ components:
               $ref: '#/components/prim/BlogTitle'
             description:
               $ref: '#/components/prim/BlogDescription'
+    BlogId:
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            blogId:
+              $ref: '#/components/prim/BlogId'
   header:
     Session:
       in: header
@@ -236,3 +245,25 @@ paths:
             - Blog description exceeds 1000 characters
           schema:
             $ref: '#/components/return/Error'
+    delete:
+      summary: Delete a blog
+      description: Deletes a blog from the system when given a blog id
+      tags:
+        - "Blog Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+        - $ref: '#/components/body/BlogId'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/BlogId'
+        401:
+          description: Session is invalid
+          schema:
+            $ref: '#/components/return/Error'
+        403:
+          description: Blog id is invalid or not owned by user
+          schema:
+            $ref: '#/components/return/Error'   
+
