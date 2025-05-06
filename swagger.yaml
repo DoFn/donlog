@@ -16,31 +16,86 @@ tags:
     description: Routes that are used for interacting with and managing blogs
   - name: "Admin Routes"
     description: Routes that are related to server data and management
-
 components:
-  Error:
-    type: string
-    example: "specific message about why route failed"
-  Email:
-    type: string
-    example: "person@gmail.com"
-  Password:
-    type: string
-    example: "pAs5w0Rd19#"
-  NameFirst:
-    type: string
-    example: "Donald"
-  NameLast:
-    type: string
-    example: "Danilo"
-  NameUser:
-    type: string
-    example: "DoFn"
-  Session:
-    type: string
-    example: "abgo1940vwnfo139gfn"
-  BlogId:
-    type: integer
-    example: 123
-  
+  prim:
+    Email:
+      type: string
+      example: "person@gmail.com"
+    Error:
+      type: string
+      example: "specific message about why route failed"
+    Password:
+      type: string
+      example: "pAs5w0Rd19#"
+    NameFirst:
+      type: string
+      example: "Donald"
+    NameLast:
+      type: string
+      example: "Danilo"
+    NameUser:
+      type: string
+      example: "DoFn"
+    Session:
+      type: string
+      example: "abgo1940vwnfo139gfn"
+    BlogId:
+      type: integer
+      example: "123"
+  return:
+    Session:
+      type: object
+      properties:
+        session:
+          $ref: '#/components/prim/Session'
+    Error:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/prim/Error'
+  body:
+    Register:
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            email:
+              $ref: '#/components/prim/Email'
+            password:
+              $ref: '#/components/prim/Password'
+            nameFirst:
+              $ref: '#/components/prim/NameFirst'
+            nameLast:
+              $ref: '#/components/prim/NameLast'
+            nameUser:
+              $ref: '#/components/prim/NameUser'
+paths:
+  /user/auth/register:
+    post:
+      summary: Register a new DonLog user
+      description: This route registers a DonLog account in the system, when given user details
+      tags:
+        - "Authentication Routes"
+      parameters:
+        - $ref: '#/components/body/Register'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/Session'
+        400:
+          description: |
+            If any of the following conditions are met: 
+            - Email address is in use
+            - Email is invalid (using https://pkg.go.dev/github.com/AfterShip/email-verifier)
+            - Username is in use
+            - NameFirst or NameLast has characters other than alphabetic characters
+            - NameFirst or NameLast is empty
+            - Password is less than 10 characters
+            - Password does not contain at least 1 capital letter, lowercase letter, number or special character
+          schema:
+            $ref: '#/components/return/Error'
 
+  
