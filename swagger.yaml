@@ -172,7 +172,22 @@ paths:
             - Password is not correct for the given account
           schema:
             $ref: '#/components/return/Error'
-
+    delete:
+      summary: Log out a DonLog user
+      description: Deletes an active user session, when given in the header
+      tags:
+        - "Authentication Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/Empty'
+        401:
+          description: Session is invalid
+          schema:
+            $ref: '#/components/return/Error'
 
 
 
