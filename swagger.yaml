@@ -42,6 +42,12 @@ components:
     BlogId:
       type: integer
       example: "123"
+    BlogTitle:
+      type: string
+      example: "My Blog"
+    BlogDescription:
+      type: string
+      example: "This is a blog about myself"
   return:
     Empty:
       type: object
@@ -55,6 +61,11 @@ components:
       properties:
         error:
           $ref: '#/components/prim/Error'
+    BlogId:
+      type: object
+      properties:
+        blogId: 
+          $ref: '#/components/prim/BlogId'
   body:
     Register:
         in: body
@@ -95,6 +106,17 @@ components:
               $ref: '#/components/prim/Password'
             nameUser:
               $ref: '#/components/prim/NameUser'
+    CreateBlog:
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            title:
+              $ref: '#/components/prim/BlogTitle'
+            description:
+              $ref: '#/components/prim/BlogDescription'
   header:
     Session:
       in: header
@@ -188,8 +210,29 @@ paths:
           description: Session is invalid
           schema:
             $ref: '#/components/return/Error'
-
-
-
-
-  
+  /user/blog:
+    post:
+      summary: Create a new blog 
+      description: Takes in blog information, and creates a blog with said information in the system
+      tags:
+        - "Blog Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+        - $ref: '#/components/body/CreateBlog'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/BlogId'
+        401:
+          description: Session is invalid
+          schema:
+            $ref: '#/components/return/Error'
+        400:
+          description: |
+            If any of the following are true:
+            - Blog title is under 6 characters
+            - Blog title is not alphanumeric
+            - Blog description exceeds 1000 characters
+          schema:
+            $ref: '#/components/return/Error'
