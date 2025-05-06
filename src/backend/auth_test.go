@@ -4,5 +4,7 @@ import (
 	"testing"
 )
 
-func TestPlaceholderAuth(t *testing.T) {
+// UserRegistration Tests
+func TestSuccessfulRegistration(t *testing.T) {
+	
 }
