@@ -84,6 +84,17 @@ components:
               $ref: '#/components/prim/Email'
             password:
               $ref: '#/components/prim/Password'
+    Login:
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            password:
+              $ref: '#/components/prim/Password'
+            nameUser:
+              $ref: '#/components/prim/NameUser'
   header:
     Session:
       in: header
@@ -141,6 +152,27 @@ paths:
             - Password does not match logged in user's password
           schema:
             $ref: '#/components/return/Error'
+  /user/auth/login:
+    post:
+      summary: Log in a DonLog user
+      description: Takes in account information, and generates a session if the provided details match an account
+      tags:
+        - "Authentication Routes"
+      parameters:
+        - $ref: '#/components/body/Login'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/Session'
+        400:
+          description: |
+            If any of the following are true:
+            - Username does not exist
+            - Password is not correct for the given account
+          schema:
+            $ref: '#/components/return/Error'
+
 
 
 
