@@ -1,0 +1,46 @@
+swagger: "2.0"
+info:
+  title: DonLog API
+  description: |
+    API specification for DonLog blogging project
+    Server implementation must match following routes, to be compatible with frontend
+  version: 1.0.0
+ 
+schemes:
+  - http
+
+tags:
+  - name: "Authentication Routes"
+    description: Routes that relate to account creation and management
+  - name: "Blog Routes"
+    description: Routes that are used for interacting with and managing blogs
+  - name: "Admin Routes"
+    description: Routes that are related to server data and management
+
+components:
+  Error:
+    type: string
+    example: "specific message about why route failed"
+  Email:
+    type: string
+    example: "person@gmail.com"
+  Password:
+    type: string
+    example: "pAs5w0Rd19#"
+  NameFirst:
+    type: string
+    example: "Donald"
+  NameLast:
+    type: string
+    example: "Danilo"
+  NameUser:
+    type: string
+    example: "DoFn"
+  Session:
+    type: string
+    example: "abgo1940vwnfo139gfn"
+  BlogId:
+    type: integer
+    example: 123
+  
+
