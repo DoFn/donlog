@@ -43,6 +43,8 @@ components:
       type: integer
       example: "123"
   return:
+    Empty:
+      type: object
     Session:
       type: object
       properties:
@@ -71,6 +73,24 @@ components:
               $ref: '#/components/prim/NameLast'
             nameUser:
               $ref: '#/components/prim/NameUser'
+    Unregister:
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            email:
+              $ref: '#/components/prim/Email'
+            password:
+              $ref: '#/components/prim/Password'
+  header:
+    Session:
+      in: header
+      name: session
+      required: true
+      schema:
+        type: string
 paths:
   /user/auth/register:
     post:
@@ -97,5 +117,32 @@ paths:
             - Password does not contain at least 1 capital letter, lowercase letter, number or special character
           schema:
             $ref: '#/components/return/Error'
+    delete:
+      summary: Unregister a DonLog user
+      description: This route deletes a DonLog user's account, when in a valid session, after re-entering account details
+      tags:
+        - "Authentication Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+        - $ref: '#/components/body/Unregister'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/Empty'
+        401:
+          description: Session is invalid
+          schema:
+            $ref: '#/components/return/Error'
+        400:
+          description: |
+            If any of the following are true:
+            - Email does not refer to logged in user
+            - Password does not match logged in user's password
+          schema:
+            $ref: '#/components/return/Error'
+
+
+
 
   
