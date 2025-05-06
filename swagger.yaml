@@ -42,6 +42,9 @@ components:
     BlogId:
       type: integer
       example: "123"
+    PageId:
+      type: integer
+      example: "123"
     BlogTitle:
       type: string
       example: "My Blog"
@@ -66,6 +69,11 @@ components:
       properties:
         blogId: 
           $ref: '#/components/prim/BlogId'
+    PageId:
+      type: object
+      properties:
+        pageId: 
+          $ref: '#/components/prim/PageId'
   body:
     Register:
         in: body
@@ -126,6 +134,15 @@ components:
           properties:
             blogId:
               $ref: '#/components/prim/BlogId'
+    PageId:
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            pageId:
+              $ref: '#/components/prim/PageId'
   header:
     Session:
       in: header
@@ -133,6 +150,13 @@ components:
       required: true
       schema:
         type: string
+  path: 
+    BlogId: 
+      in: path
+      name: blogid
+      required: true
+      schema:
+        $ref: '#/components/prim/BlogId'
 paths:
   /user/auth/register:
     post:
@@ -181,6 +205,23 @@ paths:
             If any of the following are true:
             - Email does not refer to logged in user
             - Password does not match logged in user's password
+          schema:
+            $ref: '#/components/return/Error'
+  /user/auth/details:
+    get:
+      summary: Get the details of a DonLog user
+      description: Return the registration information of a DonLog user, when in an active session
+      tags:
+        - "Authentication Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/Empty'
+        401:
+          description: Session is invalid
           schema:
             $ref: '#/components/return/Error'
   /user/auth/login:
@@ -266,4 +307,69 @@ paths:
           description: Blog id is invalid or not owned by user
           schema:
             $ref: '#/components/return/Error'   
-
+  /user/blog/{blogid}:
+    post:
+      summary: Create a new blog page
+      description: Takes in a blog id, and page info, and adds the page to the blog
+      tags:
+        - "Blog Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+        - $ref: '#/components/path/BlogId'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/PageId'
+        401:
+          description: Session is invalid
+          schema:
+            $ref: '#/components/return/Error'
+        403:
+          description: Blog is invalid or not owned by user
+          schema:
+            $ref: '#/components/return/Error'
+        400:
+          description: |
+            If any of the following are true:
+            - Page title is empty
+            - Page text is empty
+          schema:
+            $ref: '#/components/return/Error'
+    delete:
+      summary: Delete a page from a blog
+      description: takes in a blog id, session, and pageid, then deletes the page
+      tags:
+        - "Blog Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+        - $ref: '#/components/path/BlogId'
+        - $ref: '#/components/body/PageId'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/Empty'
+        401:
+          description: Session is invalid
+          schema:
+            $ref: '#/components/return/Error'
+        403:
+          description: Blog is invalid or not owned by user
+          schema:
+            $ref: '#/components/return/Error'
+  /reset: 
+    delete:
+      summary: Reset data
+      description: Deletes all stored data for DonLog application, route should only be enabled for development
+      tags:
+      - "Admin Routes"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/Empty'
+        403:
+          description: Route is disabled
+          schema:
+            $ref: '#/components/return/Error'
