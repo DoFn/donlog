@@ -40,7 +40,8 @@ func UserDelete(
 // This function returns the details of a registered DonLog user, or sets error
 // if action could not be performed
 func UserDetails(
-	userId int,
+	userId string,
+	data *data
 ) (userDetails, error) {
 	details := userDetails{name: "Donald", email: "thedonenzo@gmail.com", username: "DoFn"}
 	return details, nil

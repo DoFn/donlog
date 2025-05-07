@@ -132,3 +132,30 @@ func TestFailedRegistrationDeletionPassword(t *testing.T) {
 		t.Errorf("Deletion with invalid password succeeded")
 	}
 }
+
+// UserDetails tests
+func TestSuccessfulDetails(t *testing.T) {
+	data := data{users: []userInfo{}}
+	userId, error1 := UserRegister("Donald", "Danilo", "DoFn", "thedonenzo@gmail.com", "P1#rfcJMN1", &data);
+	if error1 != nil {
+		t.Errorf("Successful registration failed")
+	}
+
+	_, error2 := UserDetails(userId, &data)
+	if error2 != nil {
+		t.Errorf("Successful details call failed")
+	}
+}
+
+func TestFailedDetailsUserId(t *testing.T) {
+	data := data{users: []userInfo{}}
+	userId, error1 := UserRegister("Donald", "Danilo", "DoFn", "thedonenzo@gmail.com", "P1#rfcJMN1", &data);
+	if error1 != nil {
+		t.Errorf("Successful registration failed")
+	}
+
+	_, error2 := UserDetails(userId + "1", &data)
+	if error2 == nil {
+		t.Errorf("Details call with wrong userId succeeded")
+	}
+}
