@@ -24,7 +24,7 @@ func UserRegister(
 // This function deletes a registered user from DonLog, or sets error to not be
 // nil if deletion fails
 func UserDelete(
-	userId int,
+	userId string,
 	password string,
 ) (error) {
 	return nil

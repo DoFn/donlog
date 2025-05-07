@@ -92,3 +92,43 @@ func TestFailedRegistrationPasswordCharacters(t *testing.T) {
 		t.Errorf("Weak password registration succeeded")
 	}
 }
+
+// UserDelete Tests
+func TestSuccessfulRegistrationDeletion(t *testing.T) {
+	data := data{users: []userInfo{}}
+	userId, error1 := UserRegister("Donald", "Danilo", "DoFn", "thedonenzo@gmail.com", "P1#rfcJMN1", &data);
+	if error1 != nil {
+		t.Errorf("Successful registration failed")
+	}
+
+	error2 := UserDelete(userId, "P1#rfcJMN1");
+	if error2 != nil {
+		t.Errorf("Successful deletion failed")
+	}
+}
+
+func TestFailedRegistrationDeletionUserId(t *testing.T) {
+	data := data{users: []userInfo{}}
+	userId, error1 := UserRegister("Donald", "Danilo", "DoFn", "thedonenzo@gmail.com", "P1#rfcJMN1", &data);
+	if error1 != nil {
+		t.Errorf("Successful registration failed")
+	}
+
+	error2 := UserDelete(userId + "1", "P1#rfcJMN1");
+	if error2 == nil {
+		t.Errorf("Deletion of invalid userId succeeded")
+	}
+}
+
+func TestFailedRegistrationDeletionPassword(t *testing.T) {
+	data := data{users: []userInfo{}}
+	userId, error1 := UserRegister("Donald", "Danilo", "DoFn", "thedonenzo@gmail.com", "P1#rfcJMN1", &data);
+	if error1 != nil {
+		t.Errorf("Successful registration failed")
+	}
+
+	error2 := UserDelete(userId, "P1#rfcJMN12");
+	if error2 == nil {
+		t.Errorf("Deletion with invalid password succeeded")
+	}
+}
