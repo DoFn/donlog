@@ -485,6 +485,7 @@ paths:
         - $ref: '#/components/header/Session'
         - $ref: '#/components/path/BlogId'
         - $ref: '#/components/body/PageId'
+        - $ref: '#/components/body/GetDetails'
       responses:
         200:
           description: OK
