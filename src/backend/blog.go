@@ -8,7 +8,13 @@ func BlogCreate(
 	description string,
 	data *data,
 ) (string, error) {
-	return "0", nil
+	// Check creation is valid
+	error := ValidBlogCreate(userId, title, description, data)
+	if error != nil {
+		return "", error
+	}
+
+	return DoBlogCreate(userId, title, description, data), nil
 }
 
 // This function returns the details of a user's blogs

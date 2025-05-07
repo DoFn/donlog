@@ -16,7 +16,7 @@ type userInfo struct {
 type blogInfo struct {
 	title string
 	description string
-	blogId int
+	blogId string
 	pages []pageInfo
 }
 

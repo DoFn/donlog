@@ -4,9 +4,6 @@ import (
 	"testing"
 )
 
-func TestPlaceholderBlog(t *testing.T) {
-}
-
 // BlogCreate Tests
 func TestSuccessfulBlogCreation(t *testing.T) {
 	data := data{users: []userInfo{}}
