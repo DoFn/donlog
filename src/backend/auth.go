@@ -66,10 +66,3 @@ func UserLogin(
 	return DoLogin(userName, data), nil
 }
 
-// This function logs out a DonLog user, or sets error if action could not be
-// performed
-func UserLogout(
-	userId int,
-) (error) {
-	return nil
-}
