@@ -33,6 +33,9 @@ components:
     NameLast:
       type: string
       example: "Danilo"
+    Name:
+      type: string
+      example: "Donald Danilo"
     NameUser:
       type: string
       example: "DoFn"
@@ -51,6 +54,9 @@ components:
     BlogDescription:
       type: string
       example: "This is a blog about myself"
+    PageText:
+      type: string
+      example: "Content of page"
   return:
     Empty:
       type: object
@@ -74,6 +80,57 @@ components:
       properties:
         pageId: 
           $ref: '#/components/prim/PageId'
+    PublicDetails:
+      type: object
+      properties:
+        nameUser:
+          $ref: '#/components/prim/NameUser'
+        email:
+          $ref: '#/components/prim/Email'
+        name:
+          $ref: '#/components/prim/Name'
+    BlogListSummary:
+      type: object
+      properties:
+        blogs:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                $ref: '#/components/prim/BlogTitle'
+              description:
+                $ref: '#/components/prim/BlogDescription'
+              blogId:
+                $ref: '#/components/prim/BlogId'
+    PageListSummary:
+      type: object
+      properties:
+        blogInfo:
+          type: object
+          properties:
+            title:
+              $ref: '#/components/prim/BlogTitle'
+            description:
+              $ref: '#/components/prim/BlogDescription'
+            blogId:
+              $ref: '#/components/prim/BlogId'
+        pages:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                $ref: '#/components/prim/BlogTitle'
+              pageId:
+                $ref: '#/components/prim/PageId'
+    Page: 
+      type: object 
+      properties:
+        title:
+          $ref: '#/components/prim/BlogTitle'
+        text: 
+          $ref: '#/components/prim/PageText'
   body:
     Register:
         in: body
@@ -99,8 +156,6 @@ components:
         schema:
           type: object
           properties:
-            email:
-              $ref: '#/components/prim/Email'
             password:
               $ref: '#/components/prim/Password'
     Login:
@@ -143,6 +198,26 @@ components:
           properties:
             pageId:
               $ref: '#/components/prim/PageId'
+    GetDetails:
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            nameUser:
+              $ref: '#/components/prim/NameUser'
+    PageCreate:
+      in: body
+      name: body
+      required:  true
+      schema:
+        type: object
+        properties:
+          title:
+            $ref: '#/components/prim/BlogTitle'
+          description:
+            $ref: '#/components/prim/PageText'
   header:
     Session:
       in: header
@@ -201,10 +276,7 @@ paths:
           schema:
             $ref: '#/components/return/Error'
         400:
-          description: |
-            If any of the following are true:
-            - Email does not refer to logged in user
-            - Password does not match logged in user's password
+          description: Password does not match logged in user's password
           schema:
             $ref: '#/components/return/Error'
   /user/auth/details:
@@ -219,7 +291,7 @@ paths:
         200:
           description: OK
           schema:
-            $ref: '#/components/return/Empty'
+            $ref: '#/components/return/PublicDetails'
         401:
           description: Session is invalid
           schema:
@@ -286,6 +358,31 @@ paths:
             - Blog description exceeds 1000 characters
           schema:
             $ref: '#/components/return/Error'
+    get:
+      summary: Get a list of a user's blogs
+      description: Returns a summary of a user's blogs, specified in the request body
+      tags:
+        - "Blog Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+        - $ref: '#/components/body/GetDetails'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/BlogListSummary'
+        401:
+          description: Session is invalid
+          schema:
+            $ref: '#/components/return/Error'
+        403:
+          description: User does not have permission to view specified user's blogs
+          schema:
+            $ref: '#/components/return/Error'
+        400:
+          description: Specified user does not exist
+          schema:
+            $ref: '#/components/return/Error'
     delete:
       summary: Delete a blog
       description: Deletes a blog from the system when given a blog id
@@ -298,7 +395,7 @@ paths:
         200:
           description: OK
           schema:
-            $ref: '#/components/return/BlogId'
+            $ref: '#/components/return/Empty'
         401:
           description: Session is invalid
           schema:
@@ -316,6 +413,7 @@ paths:
       parameters:
         - $ref: '#/components/header/Session'
         - $ref: '#/components/path/BlogId'
+        - $ref: '#/components/body/PageCreate'
       responses:
         200:
           description: OK
@@ -336,6 +434,31 @@ paths:
             - Page text is empty
           schema:
             $ref: '#/components/return/Error'
+    get:
+      summary: Return a summary of a blog
+      description: Takes in a blog id, and returns a summary of the pages in the blog and the blog itself
+      tags:
+        - "Blog Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+        - $ref: '#/components/path/BlogId'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/PageListSummary'
+        401:
+          description: Session is invalid
+          schema:
+            $ref: '#/components/return/Error'
+        403:
+          description: User does not have permission to view specified user's blogs
+          schema:
+            $ref: '#/components/return/Error'
+        400:
+          description: Specified user does not exist
+          schema:
+            $ref: '#/components/return/Error'
     delete:
       summary: Delete a page from a blog
       description: takes in a blog id, session, and pageid, then deletes the page
@@ -350,6 +473,29 @@ paths:
           description: OK
           schema:
             $ref: '#/components/return/Empty'
+        401:
+          description: Session is invalid
+          schema:
+            $ref: '#/components/return/Error'
+        403:
+          description: Blog is invalid or not owned by user
+          schema:
+            $ref: '#/components/return/Error'
+  /user/blog/{blogid}/page:
+    get:
+      summary: Get information on a specific blog page
+      description: Returns the content of a blog page, along with its title
+      tags:
+        - "Blog Routes"
+      parameters:
+        - $ref: '#/components/header/Session'
+        - $ref: '#/components/path/BlogId'
+        - $ref: '#/components/body/PageId'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/components/return/Page'
         401:
           description: Session is invalid
           schema:
