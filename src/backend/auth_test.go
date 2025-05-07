@@ -168,7 +168,7 @@ func TestSuccessfulLogin(t *testing.T) {
 		t.Errorf("Successful registration failed")
 	}
 
-	_, error2 := UserLogin("DoFn", "P1#rfcJMN1")
+	_, error2 := UserLogin("DoFn", "P1#rfcJMN1", &data)
 	if error2 != nil {
 		t.Errorf("Successful login failed")
 	}
@@ -181,7 +181,7 @@ func TestFailedLoginUsername(t *testing.T) {
 		t.Errorf("Successful registration failed")
 	}
 
-	_, error2 := UserLogin("DoFnow", "P1#rfcJMN1")
+	_, error2 := UserLogin("DoFnow", "P1#rfcJMN1", &data)
 	if error2 == nil {
 		t.Errorf("Login with bad username succeeded")
 	}
@@ -194,7 +194,7 @@ func TestFailedLoginPassword(t *testing.T) {
 		t.Errorf("Successful registration failed")
 	}
 
-	_, error2 := UserLogin("DoFn", "P1#rfcJMN123")
+	_, error2 := UserLogin("DoFn", "P1#rfcJMN123", &data)
 	if error2 == nil {
 		t.Errorf("Login with bad password succeeded")
 	}

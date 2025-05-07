@@ -157,3 +157,34 @@ func DoDetails(
 
 	return userDetails{name: prof.name, email: prof.email, username: prof.username}
 }
+
+// This function checks if a login is valid
+func ValidLogin(
+	username string,
+	password string,
+	data *data,
+ ) (error) {
+	// Check profile exists, and return userId if password matches and it does exist
+	for _, profile := range data.users {
+		if (profile.username == username && profile.password == password) {
+			return nil
+		}
+	}
+
+	return errors.New("profile with supplied details not found")
+}
+
+// This function returns a userId that corresponds to a users details
+func DoLogin(
+	username string,
+	data *data,
+) (string) {
+	var profile userInfo
+	for _, prof := range data.users {
+		if (prof.username == username) {
+			profile = prof
+		}
+	}
+
+	return profile.userId
+}

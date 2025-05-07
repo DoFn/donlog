@@ -56,8 +56,14 @@ func UserDetails(
 func UserLogin(
 	userName string,
 	password string,
-) (int, error) {
-	return 0, nil
+	data *data,
+) (string, error) {
+	error := ValidLogin(userName, password, data)
+	if error != nil {
+		return "", error
+	}
+
+	return DoLogin(userName, data), nil
 }
 
 // This function logs out a DonLog user, or sets error if action could not be
