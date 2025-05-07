@@ -256,6 +256,7 @@ paths:
             - NameFirst or NameLast has characters other than alphabetic characters
             - NameFirst or NameLast is empty
             - Password is less than 10 characters
+            - Password is over 30 characters
             - Password does not contain at least 1 capital letter, lowercase letter, number or special character
           schema:
             $ref: '#/components/return/Error'
