@@ -9,6 +9,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// bcrypt seed for use. Set to 4 for development, and 10 for deployment
+const bcryptSeed = 4
+
 // This function checks if a registration has correct details
 func ValidRegistration(
 	nameFirst string, 
@@ -68,7 +71,7 @@ func HashPassword(
 	userId string,
 ) (string) {
 	hashText := ([]byte)(password + userId)
-	hashedPassword, _ := bcrypt.GenerateFromPassword(hashText, 12);
+	hashedPassword, _ := bcrypt.GenerateFromPassword(hashText, bcryptSeed);
 	return (string)(hashedPassword)
 }
 
