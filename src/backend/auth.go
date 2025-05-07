@@ -41,10 +41,14 @@ func UserDelete(
 // if action could not be performed
 func UserDetails(
 	userId string,
-	data *data
+	data *data,
 ) (userDetails, error) {
-	details := userDetails{name: "Donald", email: "thedonenzo@gmail.com", username: "DoFn"}
-	return details, nil
+	error := ValidDetails(userId, data)
+	if error != nil {
+		return userDetails{name: "John", email: "Doe@gmail.com", username: "Jane"}, error
+	}
+
+	return DoDetails(userId, data), nil
 }
 
 // This function logs in a DonLog user, and returns their userId, or sets error

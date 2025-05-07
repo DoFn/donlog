@@ -126,3 +126,34 @@ func DoDelete(
 
 	data.users = slices.Delete(data.users, userIndex, userIndex + 1)
 }
+
+// This function checks whether a userId can return details
+func ValidDetails(
+	userId string,
+	data *data,
+) (error) {
+	// Check if user exists
+	for _, prof := range data.users {
+		if prof.userId == userId {
+			return nil
+		}
+	}
+
+	// Return error since user does not exist
+	return errors.New("user does not exist")
+}
+
+// This function returns the details about a user
+func DoDetails(
+	userId string,
+	data *data,
+) (userDetails) {
+	var prof userInfo
+	for _, profile := range data.users {
+		if prof.userId == userId {
+			prof = profile
+		}
+	}
+
+	return userDetails{name: prof.name, email: prof.email, username: prof.username}
+}
