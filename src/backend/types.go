@@ -9,6 +9,7 @@ type userInfo struct {
 	email string
 	username string
 	userId string
+	password string
 	blogs []blogInfo
 }
 

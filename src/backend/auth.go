@@ -26,7 +26,14 @@ func UserRegister(
 func UserDelete(
 	userId string,
 	password string,
+	data *data,
 ) (error) {
+	error := ValidDeletion(userId, password, data)
+	if error != nil {
+		return error
+	}
+	
+	DoDelete(userId, data)
 	return nil
 }
 

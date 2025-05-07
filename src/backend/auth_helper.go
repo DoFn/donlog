@@ -1,10 +1,11 @@
 package backend
 
 import (
-	"github.com/AfterShip/email-verifier"
 	"errors"
 	"regexp"
+	"github.com/AfterShip/email-verifier"
 	"github.com/google/uuid"
+	"slices"
 )
 
 // This function checks if a registration has correct details
@@ -75,8 +76,53 @@ func DoRegistration(
 		username: nameUser,
 		userId: userId,
 		blogs: []blogInfo{},
+		password: password,
 	}
 
 	data.users = append(data.users, profile);
 	return userId
+}
+
+// This function checks if a user can be deleted
+func ValidDeletion(
+	userId string,
+	password string,
+	data *data,
+) (error) {
+	// Check user for deletion exists, return error if not found
+	profileFound := false
+	var profile userInfo
+	for _, prof := range data.users {
+		if prof.userId == userId {
+			profileFound = true
+			profile = prof
+		}
+	}
+
+	if !profileFound {
+		return errors.New("profile with userId does not exist")
+	}
+
+	// Check that password matches
+	if profile.password != password {
+		return errors.New("password does not match logged in user")
+	}
+
+	// Return nil if deletion is valid
+	return nil
+}
+
+// This function deletes a user from the system
+func DoDelete(
+	userId string,
+	data *data,
+) {
+	var userIndex int
+	for index, val := range data.users {
+		if val.userId == userId {
+			userIndex = index
+		}
+	}
+
+	data.users = slices.Delete(data.users, userIndex, userIndex + 1)
 }

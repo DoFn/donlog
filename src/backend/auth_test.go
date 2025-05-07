@@ -101,7 +101,7 @@ func TestSuccessfulRegistrationDeletion(t *testing.T) {
 		t.Errorf("Successful registration failed")
 	}
 
-	error2 := UserDelete(userId, "P1#rfcJMN1");
+	error2 := UserDelete(userId, "P1#rfcJMN1", &data);
 	if error2 != nil {
 		t.Errorf("Successful deletion failed")
 	}
@@ -114,7 +114,7 @@ func TestFailedRegistrationDeletionUserId(t *testing.T) {
 		t.Errorf("Successful registration failed")
 	}
 
-	error2 := UserDelete(userId + "1", "P1#rfcJMN1");
+	error2 := UserDelete(userId + "1", "P1#rfcJMN1", &data);
 	if error2 == nil {
 		t.Errorf("Deletion of invalid userId succeeded")
 	}
@@ -127,7 +127,7 @@ func TestFailedRegistrationDeletionPassword(t *testing.T) {
 		t.Errorf("Successful registration failed")
 	}
 
-	error2 := UserDelete(userId, "P1#rfcJMN12");
+	error2 := UserDelete(userId, "P1#rfcJMN12", &data);
 	if error2 == nil {
 		t.Errorf("Deletion with invalid password succeeded")
 	}
