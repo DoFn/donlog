@@ -31,3 +31,14 @@ type userDetails struct {
 	email string
 	username string
 }
+
+type blogDetails struct {
+	title string
+	description string
+	blogId string
+}
+
+type pageDetails struct {
+	title string
+	text string
+}

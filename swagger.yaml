@@ -43,10 +43,10 @@ components:
       type: string
       example: "abgo1940vwnfo139gfn"
     BlogId:
-      type: integer
+      type: string
       example: "123"
     PageId:
-      type: integer
+      type: string
       example: "123"
     BlogTitle:
       type: string
@@ -106,15 +106,6 @@ components:
     PageListSummary:
       type: object
       properties:
-        blogInfo:
-          type: object
-          properties:
-            title:
-              $ref: '#/components/prim/BlogTitle'
-            description:
-              $ref: '#/components/prim/BlogDescription'
-            blogId:
-              $ref: '#/components/prim/BlogId'
         pages:
           type: array
           items:
@@ -444,6 +435,7 @@ paths:
       parameters:
         - $ref: '#/components/header/Session'
         - $ref: '#/components/path/BlogId'
+        - $ref: '#/components/body/GetDetails'
       responses:
         200:
           description: OK
