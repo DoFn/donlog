@@ -159,3 +159,43 @@ func TestFailedDetailsUserId(t *testing.T) {
 		t.Errorf("Details call with wrong userId succeeded")
 	}
 }
+
+// UserLogin Tests
+func TestSuccessfulLogin(t *testing.T) {
+	data := data{users: []userInfo{}}
+	_, error1 := UserRegister("Donald", "Danilo", "DoFn", "thedonenzo@gmail.com", "P1#rfcJMN1", &data);
+	if error1 != nil {
+		t.Errorf("Successful registration failed")
+	}
+
+	_, error2 := UserLogin("DoFn", "P1#rfcJMN1")
+	if error2 != nil {
+		t.Errorf("Successful login failed")
+	}
+}
+
+func TestFailedLoginUsername(t *testing.T) {
+	data := data{users: []userInfo{}}
+	_, error1 := UserRegister("Donald", "Danilo", "DoFn", "thedonenzo@gmail.com", "P1#rfcJMN1", &data);
+	if error1 != nil {
+		t.Errorf("Successful registration failed")
+	}
+
+	_, error2 := UserLogin("DoFnow", "P1#rfcJMN1")
+	if error2 == nil {
+		t.Errorf("Login with bad username succeeded")
+	}
+}
+
+func TestFailedLoginPassword(t *testing.T) {
+	data := data{users: []userInfo{}}
+	_, error1 := UserRegister("Donald", "Danilo", "DoFn", "thedonenzo@gmail.com", "P1#rfcJMN1", &data);
+	if error1 != nil {
+		t.Errorf("Successful registration failed")
+	}
+
+	_, error2 := UserLogin("DoFn", "P1#rfcJMN123")
+	if error2 == nil {
+		t.Errorf("Login with bad password succeeded")
+	}
+}
