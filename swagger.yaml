@@ -252,6 +252,7 @@ paths:
             - Email address is in use
             - Email is invalid (using https://pkg.go.dev/github.com/AfterShip/email-verifier)
             - Username is in use
+            - Username is empty
             - NameFirst or NameLast has characters other than alphabetic characters
             - NameFirst or NameLast is empty
             - Password is less than 10 characters

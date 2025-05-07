@@ -8,8 +8,17 @@ func UserRegister(
 	nameUser string,
 	email string,
 	password string,
-	) (int, error) {
-	return 0, nil
+	data *data,
+	) (string, error) {
+	// Check that registration is valid, otherwise return an error
+	error := ValidRegistration(nameFirst, nameLast, nameUser, email, password, data)
+	if error != nil {
+		return "", error
+	}
+
+	// Make requested registration and return id
+	userId := DoRegistration(nameFirst, nameLast, nameUser, email, password, data)
+	return userId, nil
 }
 
 // This function deletes a registered user from DonLog, or sets error to not be
