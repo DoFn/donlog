@@ -23,7 +23,12 @@ func BlogList(
 	targetNameUser string,
 	data *data,
 ) ([]blogDetails, error) {
-	return []blogDetails{}, nil
+	error := ValidBlogList(userId, targetNameUser, data)
+	if error != nil {
+		return []blogDetails{}, error
+	}
+
+	return DoBlogList(targetNameUser, data), nil
 }
 
 // This function deletes a blog with the given details, or returns an

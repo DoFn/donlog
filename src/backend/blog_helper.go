@@ -56,3 +56,51 @@ func DoBlogCreate(
 
 	return blog.blogId
 }
+
+// This function checks if a blog list call is valid
+func ValidBlogList(
+	userId string,
+	targetNameUser string,
+	data *data,
+) (error) {
+	// Ensure userId exists
+	idFound := false
+	userFound := false
+	for _, profile := range data.users {
+		if profile.userId == userId {
+			idFound = true
+		}
+		if profile.username == targetNameUser {
+			userFound = true
+		}
+	}
+	if !idFound {
+		return errors.New("user searching is invalid")
+	} 
+	
+	if !userFound {
+		return errors.New("target user is invalid")
+	}
+
+	return nil
+}
+
+func DoBlogList(
+	targetNameUser string,
+	data *data,
+) ([]blogDetails) {
+	var profile userInfo
+	for _, prof := range data.users {
+		if prof.username == targetNameUser {
+			profile = prof
+		}
+	}
+
+	list := []blogDetails{}
+	for _, blog := range profile.blogs {
+		blogSummary := blogDetails{title: blog.title, description: blog.description, blogId: blog.blogId}
+		list = append(list, blogSummary)
+	}
+
+	return list
+}
